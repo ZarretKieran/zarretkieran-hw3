@@ -12,7 +12,7 @@ https://docs.google.com/document/d/1jDrfTAVfJawNq3LmZnsA1uKKrkKkpoNhUlyp2nMrAZ0/
 
 ## Getting Started
 
-First, run the development server:
+First, cd into the project root, then run the development server:
 
 ```bash
 npm run dev
