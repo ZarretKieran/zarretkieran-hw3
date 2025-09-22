@@ -1,5 +1,15 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+## Contributors
+Zarret Mills - GitHub: ZarretKieran
+
+## Deployment 
+Once again, Vercel Hobby users cannot deploy from a team, so I deployed this project to Vercel from a cloned version of this repo in my personal GitHub at https://github.com/ZarretKieran/zarretkieran-hw3.
+Vercel deployment URL: zarretkieran-hw3.vercel.app
+
+##PRD
+https://docs.google.com/document/d/1jDrfTAVfJawNq3LmZnsA1uKKrkKkpoNhUlyp2nMrAZ0/edit?tab=t.0#heading=h.l3j0m6l1e7ij
+
 ## Getting Started
 
 First, run the development server:
