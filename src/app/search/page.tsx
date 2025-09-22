@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import { MOCK_FEED } from "@/lib/mock";
 import type { DocumentType } from "@/lib/types";
 import Link from "next/link";
-import { Badge, Button, Card, Section } from "@/components/ui";
+import { Badge, Button, Card } from "@/components/ui";
 import { useAppState } from "@/lib/state";
 
 const allDocTypes: DocumentType[] = ["Agenda", "Minutes", "Staff Memo", "Ordinance", "Other"];

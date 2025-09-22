@@ -4,13 +4,14 @@ import { useAppState } from "@/lib/state";
 import { Card, Button, Badge } from "@/components/ui";
 import Link from "next/link";
 import { useState, useMemo } from "react";
+import type { ImpactLevel } from "@/lib/types";
 import { MOCK_FEED } from "@/lib/mock";
 
 export default function AlertsPage() {
   const { state, setPreferences } = useAppState();
   const prefs = state.preferences;
-  const [cadence, setCadence] = useState(prefs?.alertCadence || "Daily");
-  const [threshold, setThreshold] = useState(prefs?.impactThreshold || "High");
+  const [cadence, setCadence] = useState<"Off" | "Daily" | "Weekly">(prefs?.alertCadence || "Daily");
+  const [threshold, setThreshold] = useState<ImpactLevel>(prefs?.impactThreshold || "High");
   const [saving, setSaving] = useState(false);
 
   const recent = useMemo(() => {
@@ -27,7 +28,7 @@ export default function AlertsPage() {
           <div className="grid sm:grid-cols-3 gap-4 mt-3">
             <div>
               <label className="block text-sm font-medium">Cadence</label>
-              <select value={cadence} onChange={(e) => setCadence(e.target.value as any)} className="input mt-2">
+              <select value={cadence} onChange={(e) => setCadence(e.target.value as "Off" | "Daily" | "Weekly")} className="input mt-2">
                 <option className="bg-background" value="Off">Off</option>
                 <option className="bg-background" value="Daily">Daily</option>
                 <option className="bg-background" value="Weekly">Weekly</option>
@@ -35,7 +36,7 @@ export default function AlertsPage() {
             </div>
             <div>
               <label className="block text-sm font-medium">Impact threshold</label>
-              <select value={threshold} onChange={(e) => setThreshold(e.target.value as any)} className="input mt-2">
+              <select value={threshold} onChange={(e) => setThreshold(e.target.value as ImpactLevel)} className="input mt-2">
                 <option className="bg-background" value="Low">Low</option>
                 <option className="bg-background" value="Medium">Medium</option>
                 <option className="bg-background" value="High">High</option>
@@ -51,8 +52,8 @@ export default function AlertsPage() {
                     workspaceName: prefs?.workspaceName || "My Workspace",
                     jurisdictions: prefs?.jurisdictions || [],
                     topics: prefs?.topics || [],
-                    alertCadence: cadence as any,
-                    impactThreshold: threshold as any,
+                    alertCadence: cadence,
+                    impactThreshold: threshold,
                   });
                   setTimeout(() => setSaving(false), 300);
                 }}

@@ -4,7 +4,7 @@ import { useParams } from "next/navigation";
 import { MOCK_FEED } from "@/lib/mock";
 import { SplitViewer } from "@/components/SplitViewer";
 import Link from "next/link";
-import { Badge, Button, Card, Section } from "@/components/ui";
+import { Button, Card } from "@/components/ui";
 import { useAppState } from "@/lib/state";
 
 export default function ItemDetailPage() {

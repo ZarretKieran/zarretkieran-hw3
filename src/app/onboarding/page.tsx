@@ -161,7 +161,7 @@ export default function OnboardingPage() {
         <div className="grid sm:grid-cols-2 gap-6">
           <Card>
             <label className="block text-sm font-medium">Alert cadence</label>
-            <select value={alertCadence} onChange={(e) => setAlertCadence(e.target.value as any)} className="input mt-2">
+            <select value={alertCadence} onChange={(e) => setAlertCadence(e.target.value as UserPreferences["alertCadence"])} className="input mt-2">
               <option className="bg-background" value="Off">Off</option>
               <option className="bg-background" value="Daily">Daily</option>
               <option className="bg-background" value="Weekly">Weekly</option>

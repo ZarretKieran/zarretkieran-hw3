@@ -1,5 +1,4 @@
-import Link from "next/link";
-import { Button, Card, LinkButton } from "@/components/ui";
+import { Card, LinkButton } from "@/components/ui";
 
 export default function Home() {
   return (

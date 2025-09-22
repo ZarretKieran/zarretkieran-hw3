@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useAppState } from "@/lib/state";
 import { MOCK_FEED } from "@/lib/mock";
-import { Badge, Button, Card, Section } from "@/components/ui";
+import { Badge, Button, Section } from "@/components/ui";
 
 export default function DashboardPage() {
   const { state, addToBrief } = useAppState();

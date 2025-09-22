@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
-import type { AppState, FeedItem, UserPreferences } from "@/lib/types";
+import type { AppState, UserPreferences } from "@/lib/types";
 
 const STORAGE_KEY = "civicpulse_app_state_v1";
 

@@ -2,7 +2,7 @@
 
 import { useAppState } from "@/lib/state";
 import { MOCK_FEED } from "@/lib/mock";
-import { Button, Card, Section } from "@/components/ui";
+import { Button, Card } from "@/components/ui";
 import Link from "next/link";
 
 export default function BriefPage() {
