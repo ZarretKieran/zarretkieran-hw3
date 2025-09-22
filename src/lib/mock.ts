@@ -1,4 +1,4 @@
-import type { FeedItem } from "@/lib/types";
+import type { FeedItem, DocumentType, Attachment } from "@/lib/types";
 
 export const MOCK_FEED: FeedItem[] = [
   {
@@ -110,13 +110,13 @@ export const MOCK_FEED: FeedItem[] = [
       "Ordinance draft p.5 — Development standards",
     ],
   },
-  ...Array.from({ length: 14 }).map((_, i) => ({
+  ...Array.from({ length: 14 }).map((_, i): FeedItem => ({
     id: `item-ks-johnson-generated-${i + 2}`,
     entity: i % 2 ? "Johnson County School Board" : "Johnson County Planning Board",
     title: i % 2 ? `Curriculum review update ${i + 2}` : `Subdivision regulation amendments ${i + 2}`,
     meetingDate: new Date(Date.now() - 86400000 * (2 + i)).toISOString(),
     attachments: [
-      { id: `g${i}-1`, title: "Agenda", type: "Agenda", pageCount: 8 + (i % 5) },
+      { id: `g${i}-1`, title: "Agenda", type: "Agenda" as DocumentType, pageCount: 8 + (i % 5) } as Attachment,
     ],
     jurisdiction: "Johnson County, KS",
     counties: ["Johnson"],
@@ -124,7 +124,7 @@ export const MOCK_FEED: FeedItem[] = [
     impact: (i % 3 === 0 ? "High" : i % 3 === 1 ? "Medium" : "Low") as FeedItem["impact"],
     stage: i % 2 ? "Draft" : "Work Session",
     updatedAt: new Date().toISOString(),
-    docTypes: ["Agenda"],
+    docTypes: ["Agenda" as DocumentType],
     topics: i % 2 ? ["education"] : ["zoning"],
   })),
 ];
