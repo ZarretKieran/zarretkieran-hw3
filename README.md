@@ -8,7 +8,7 @@ Once again, Vercel Hobby users cannot deploy from a team, so I deployed this pro
 Vercel deployment URL: zarretkieran-hw3.vercel.app
 
 ## PRD
-https://docs.google.com/document/d/1jDrfTAVfJawNq3LmZnsA1uKKrkKkpoNhUlyp2nMrAZ0/edit?tab=t.0#heading=h.l3j0m6l1e7ij
+https://drive.google.com/file/d/1ULET7aF2T_C3-sMmDHyVD2Qh03RiFXZT/view?usp=sharing
 
 ## Getting Started
 
