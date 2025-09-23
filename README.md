@@ -5,6 +5,7 @@ Zarret Mills - GitHub: ZarretKieran
 
 ## Deployment 
 Once again, Vercel Hobby users cannot deploy from a team, so I deployed this project to Vercel from a cloned version of this repo in my personal GitHub at https://github.com/ZarretKieran/zarretkieran-hw3.
+
 Vercel deployment URL: zarretkieran-hw3.vercel.app
 
 ## PRD
