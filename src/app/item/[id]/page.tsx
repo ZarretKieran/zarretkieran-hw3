@@ -8,6 +8,7 @@ import { TranscriptViewer } from "@/components/TranscriptViewer";
 import Link from "next/link";
 import { Button, Card } from "@/components/ui";
 import { useAppState } from "@/lib/state";
+import ReactMarkdown from "react-markdown";
 
 export default function ItemDetailPage() {
   const params = useParams<{ id: string }>();
@@ -89,8 +90,23 @@ export default function ItemDetailPage() {
             <div className="p-4 text-sm space-y-4">
               <div className="text-xs uppercase tracking-wide text-[--color-muted] mb-3">AI-Generated Summary</div>
               {aiSummary ? (
-                <div className="prose prose-sm prose-invert max-w-none">
-                  <div className="whitespace-pre-wrap">{aiSummary}</div>
+                <div className="prose prose-sm prose-invert max-w-none markdown-content">
+                  <ReactMarkdown
+                    components={{
+                      h1: ({node, ...props}) => <h1 className="text-lg font-bold mt-4 mb-2 text-[--color-brand-100]" {...props} />,
+                      h2: ({node, ...props}) => <h2 className="text-base font-semibold mt-3 mb-2 text-[--color-brand-200]" {...props} />,
+                      h3: ({node, ...props}) => <h3 className="text-sm font-semibold mt-2 mb-1 text-[--color-brand-300]" {...props} />,
+                      p: ({node, ...props}) => <p className="mb-3 leading-relaxed" {...props} />,
+                      ul: ({node, ...props}) => <ul className="list-disc list-inside mb-3 space-y-1" {...props} />,
+                      ol: ({node, ...props}) => <ol className="list-decimal list-inside mb-3 space-y-1" {...props} />,
+                      li: ({node, ...props}) => <li className="ml-2" {...props} />,
+                      strong: ({node, ...props}) => <strong className="font-semibold text-[--color-brand-100]" {...props} />,
+                      em: ({node, ...props}) => <em className="italic text-[--color-muted]" {...props} />,
+                      code: ({node, ...props}) => <code className="bg-white/10 px-1 py-0.5 rounded text-xs" {...props} />,
+                    }}
+                  >
+                    {aiSummary}
+                  </ReactMarkdown>
                 </div>
               ) : (
                 <div className="text-[--color-muted] italic">
