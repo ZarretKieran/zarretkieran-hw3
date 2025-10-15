@@ -10,11 +10,17 @@ interface TranscriptData {
   content: string[];
 }
 
-export function TranscriptViewer() {
+interface TranscriptViewerProps {
+  onSummaryGenerated?: (summary: string) => void;
+  userTopics?: string[];
+}
+
+export function TranscriptViewer({ onSummaryGenerated, userTopics }: TranscriptViewerProps) {
   const [url, setUrl] = useState("");
   const [transcript, setTranscript] = useState<TranscriptData | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [generatingSummary, setGeneratingSummary] = useState(false);
 
   const handleFetchTranscript = async () => {
     if (!url.trim()) {
@@ -40,11 +46,46 @@ export function TranscriptViewer() {
 
       const data = await response.json();
       setTranscript(data.transcript);
+      
+      // Generate AI summary after transcript is loaded
+      if (data.transcript && onSummaryGenerated) {
+        await generateSummary(data.transcript.content);
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : "An error occurred");
       setTranscript(null);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const generateSummary = async (transcriptContent: string[]) => {
+    if (!onSummaryGenerated) return;
+    
+    setGeneratingSummary(true);
+    try {
+      const response = await fetch("/api/summarize-transcript", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ 
+          transcriptContent,
+          userTopics: userTopics || []
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to generate summary");
+      }
+
+      const data = await response.json();
+      onSummaryGenerated(data.summary);
+    } catch (err) {
+      console.error("Summary generation error:", err);
+      onSummaryGenerated("Failed to generate summary. Please try again.");
+    } finally {
+      setGeneratingSummary(false);
     }
   };
 
@@ -59,7 +100,7 @@ export function TranscriptViewer() {
       {/* URL Input Section */}
       <div className="rounded-lg border border-white/10 bg-white/5 p-4">
         <label className="block text-sm font-medium mb-2">
-          Municipal Transcript URL
+          Municipal Transcript URL (temporary - no DB implemented yet)
         </label>
         <div className="flex gap-2">
           <input
@@ -72,10 +113,10 @@ export function TranscriptViewer() {
           />
           <Button 
             onClick={handleFetchTranscript} 
-            disabled={loading || !url.trim()}
+            disabled={loading || generatingSummary || !url.trim()}
             variant="secondary"
           >
-            {loading ? "Loading..." : "Load Transcript"}
+            {loading ? "Loading..." : generatingSummary ? "Generating Summary..." : "Load Transcript"}
           </Button>
           {transcript && (
             <Button onClick={handleClear} variant="ghost">

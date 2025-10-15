@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useParams } from "next/navigation";
 import { MOCK_FEED } from "@/lib/mock";
 import { SplitViewer } from "@/components/SplitViewer";
@@ -12,6 +13,9 @@ export default function ItemDetailPage() {
   const params = useParams<{ id: string }>();
   const item = MOCK_FEED.find((x) => x.id === params.id);
   const { state, addToBrief, removeFromBrief } = useAppState();
+  const [aiSummary, setAiSummary] = useState<string | null>(null);
+  
+  const userTopics = state.preferences?.topics || [];
 
   if (!item) {
     return (
@@ -78,22 +82,34 @@ export default function ItemDetailPage() {
       <div className="mt-6">
         <div className="flex items-baseline justify-between mb-2">
           <div className="section-title">Document Viewer</div>
-          <div className="text-xs muted">Left: extracted text · Right: live transcript loader</div>
+          <div className="text-xs muted">Left: AI summary · Right: live transcript loader</div>
         </div>
         <SplitViewer
           left={
             <div className="p-4 text-sm space-y-4">
-              <div className="text-xs muted">Extracted text (mock) with keyword highlights</div>
-              {(item.extractedText && item.extractedText.length > 0 ? item.extractedText : [
-                "No extracted text available for this item.",
-              ]).map((para, idx) => (
-                <p key={idx}>{para}</p>
-              ))}
+              <div className="text-xs uppercase tracking-wide text-[--color-muted] mb-3">AI-Generated Summary</div>
+              {aiSummary ? (
+                <div className="prose prose-sm prose-invert max-w-none">
+                  <div className="whitespace-pre-wrap">{aiSummary}</div>
+                </div>
+              ) : (
+                <div className="text-[--color-muted] italic">
+                  Load a transcript to generate an AI summary with key takeaways, talking points, and relevance to your topics.
+                  {userTopics.length > 0 && (
+                    <div className="mt-2">
+                      <span className="font-medium">Your topics:</span> {userTopics.join(", ")}
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
           }
           right={
             <div className="h-full overflow-auto p-4">
-              <TranscriptViewer />
+              <TranscriptViewer 
+                onSummaryGenerated={setAiSummary}
+                userTopics={userTopics}
+              />
             </div>
           }
         />
