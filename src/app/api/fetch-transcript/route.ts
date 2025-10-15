@@ -27,13 +27,13 @@ export async function POST(request: NextRequest) {
 }
 
 function parseTranscript(html: string): { title: string; date: string; speakers: string[]; content: string[] } {
-  // Extract title
-  const titleMatch = html.match(/<div class="text-3xl font-black text-center">\s*([^<]+)/);
-  const title = titleMatch ? titleMatch[1].trim() : 'Unknown Meeting';
+  // Extract title - handle multiline content
+  const titleMatch = html.match(/<div class="text-3xl font-black text-center">\s*([\s\S]*?)<div class="mx-auto/);
+  const title = titleMatch ? titleMatch[1].replace(/<[^>]+>/g, '').trim() : 'Unknown Meeting';
   
   // Extract date
-  const dateMatch = html.match(/<div class="mx-auto text-xl text-gray-500">\s*([^<]+)/);
-  const date = dateMatch ? dateMatch[1].trim() : '';
+  const dateMatch = html.match(/<div class="mx-auto text-xl text-gray-500">\s*([\s\S]*?)<\/div>/);
+  const date = dateMatch ? dateMatch[1].replace(/<[^>]+>/g, '').trim() : '';
   
   // Extract speaker names and content
   const speakers: Set<string> = new Set();
