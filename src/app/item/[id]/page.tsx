@@ -52,15 +52,9 @@ export default function ItemDetailPage() {
 
       {/* Document Viewer Section */}
       <div className="mt-8">
-        <div className="flex items-center justify-between mb-4 pb-3 accent-border-top pt-4">
-          <div>
-            <div className="section-title">Document Viewer</div>
-            <div className="text-xs text-[--color-muted] mt-1">AI-powered analysis and transcript loading</div>
-          </div>
-          <div className="flex items-center gap-2">
-            <span className="text-xs px-2 py-1 rounded-md bg-[--color-brand-500]/10 text-[--color-brand-200] border border-[--color-brand-500]/20">AI Summary</span>
-            <span className="text-xs px-2 py-1 rounded-md bg-[--color-accent-cyan]/10 text-cyan-300 border border-[--color-accent-cyan]/20">Live Transcript</span>
-          </div>
+        <div className="mb-4 pb-3 accent-border-top pt-4">
+          <div className="section-title">Document Viewer</div>
+          <div className="text-xs text-[--color-muted] mt-1">AI-powered analysis and transcript loading</div>
         </div>
         <SplitViewer
           left={
