@@ -15,6 +15,11 @@ export default function ItemDetailPage() {
   const item = MOCK_FEED.find((x) => x.id === params.id);
   const { state, addToBrief, removeFromBrief } = useAppState();
   const [aiSummary, setAiSummary] = useState<string | null>(null);
+  const [transcriptContent, setTranscriptContent] = useState<string[] | null>(null);
+  const [followUpQuestion, setFollowUpQuestion] = useState("");
+  const [followUpAnswer, setFollowUpAnswer] = useState<string | null>(null);
+  const [isAskingQuestion, setIsAskingQuestion] = useState(false);
+  const [conversationHistory, setConversationHistory] = useState<Array<{question: string; answer: string}>>([]);
   
   const userTopics = state.preferences?.topics || [];
 
@@ -52,9 +57,15 @@ export default function ItemDetailPage() {
 
       {/* Document Viewer Section */}
       <div className="mt-8">
-        <div className="mb-4 pb-3 accent-border-top pt-4">
-          <div className="section-title">Document Viewer</div>
-          <div className="text-xs text-[--color-muted] mt-1">AI-powered analysis and transcript loading</div>
+        <div className="flex items-center justify-between mb-4 pb-3 accent-border-top pt-4">
+          <div>
+            <div className="section-title">Document Viewer</div>
+            <div className="text-xs text-[--color-muted] mt-1">AI-powered analysis and transcript loading</div>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="text-xs px-2 py-1 rounded-md bg-[--color-brand-500]/10 text-[--color-brand-200] border border-[--color-brand-500]/20">AI Summary</span>
+            <span className="text-xs px-2 py-1 rounded-md bg-[--color-accent-cyan]/10 text-cyan-300 border border-[--color-accent-cyan]/20">Live Transcript</span>
+          </div>
         </div>
         <SplitViewer
           left={
@@ -82,7 +93,126 @@ export default function ItemDetailPage() {
                     {aiSummary}
                   </ReactMarkdown>
                 </div>
-              ) : (
+              ) : null}
+              
+              {/* Follow-up Q&A Section */}
+              {aiSummary && transcriptContent && (
+                <div className="mt-6 pt-6 border-t-2 border-[--color-brand-500]/20">
+                  <div className="flex items-center gap-2 mb-4">
+                    <svg className="w-4 h-4 text-[--color-brand-300]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <div className="text-xs uppercase tracking-wider font-bold text-[--color-brand-200]">
+                      Ask Follow-Up Questions
+                    </div>
+                  </div>
+                  
+                  {/* Conversation History */}
+                  {conversationHistory.length > 0 && (
+                    <div className="space-y-3 mb-4 max-h-[300px] overflow-y-auto custom-scrollbar pr-2">
+                      {conversationHistory.map((item, idx) => (
+                        <div key={idx} className="space-y-2">
+                          <div className="rounded-lg bg-[--color-brand-500]/10 border border-[--color-brand-500]/30 p-3">
+                            <div className="text-xs font-bold text-[--color-brand-200] mb-1 flex items-center gap-1.5">
+                              <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                              </svg>
+                              You asked:
+                            </div>
+                            <p className="text-sm text-[--color-foreground]">{item.question}</p>
+                          </div>
+                          <div className="rounded-lg bg-[--color-accent-emerald]/10 border border-[--color-accent-emerald]/30 p-3">
+                            <div className="text-xs font-bold text-emerald-300 mb-1 flex items-center gap-1.5">
+                              <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                              </svg>
+                              AI Response:
+                            </div>
+                            <div className="prose prose-sm prose-invert max-w-none">
+                              <ReactMarkdown
+                                components={{
+                                  p: ({node, ...props}) => <p className="mb-2 leading-relaxed text-sm" {...props} />,
+                                  ul: ({node, ...props}) => <ul className="list-disc list-inside mb-2 space-y-1" {...props} />,
+                                  li: ({node, ...props}) => <li className="ml-2 text-sm" {...props} />,
+                                  strong: ({node, ...props}) => <strong className="font-semibold text-emerald-200" {...props} />,
+                                }}
+                              >
+                                {item.answer}
+                              </ReactMarkdown>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  
+                  {/* Input Form */}
+                  <div className="rounded-xl border-2 border-[--color-brand-400]/30 bg-gradient-to-br from-[--color-surface-elevated] to-[--color-surface] p-4 shadow-lg">
+                    <textarea
+                      value={followUpQuestion}
+                      onChange={(e) => setFollowUpQuestion(e.target.value)}
+                      placeholder="Ask a question about this transcript..."
+                      className="w-full px-4 py-3 bg-[--color-surface-2] border-2 border-[--color-brand-400]/30 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[--color-brand-400] focus:border-[--color-brand-400] transition-all resize-none"
+                      rows={3}
+                      disabled={isAskingQuestion}
+                    />
+                    <div className="flex items-center justify-between mt-3">
+                      <div className="text-xs text-[--color-muted]">
+                        {isAskingQuestion ? (
+                          <span className="flex items-center gap-1.5">
+                            <div className="w-1.5 h-1.5 rounded-full bg-[--color-brand-400] animate-pulse"></div>
+                            Processing your question...
+                          </span>
+                        ) : (
+                          "Ask anything about the meeting content"
+                        )}
+                      </div>
+                      <Button
+                        onClick={async () => {
+                          if (!followUpQuestion.trim() || isAskingQuestion) return;
+                          
+                          setIsAskingQuestion(true);
+                          try {
+                            const response = await fetch("/api/ask-followup", {
+                              method: "POST",
+                              headers: { "Content-Type": "application/json" },
+                              body: JSON.stringify({
+                                question: followUpQuestion,
+                                transcriptContent: transcriptContent,
+                                conversationHistory: conversationHistory
+                              })
+                            });
+                            
+                            if (!response.ok) throw new Error("Failed to get answer");
+                            
+                            const data = await response.json();
+                            setConversationHistory([...conversationHistory, {
+                              question: followUpQuestion,
+                              answer: data.answer
+                            }]);
+                            setFollowUpQuestion("");
+                          } catch (err) {
+                            console.error("Follow-up question error:", err);
+                            setConversationHistory([...conversationHistory, {
+                              question: followUpQuestion,
+                              answer: "Sorry, I couldn't process your question. Please try again."
+                            }]);
+                          } finally {
+                            setIsAskingQuestion(false);
+                          }
+                        }}
+                        disabled={!followUpQuestion.trim() || isAskingQuestion}
+                        variant="primary"
+                        className="ml-auto"
+                      >
+                        {isAskingQuestion ? "Asking..." : "Ask"}
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              )}
+              
+              {!aiSummary && (
                 <div className="rounded-lg border-2 border-dashed border-[--color-brand-500]/20 bg-[--color-brand-500]/5 p-6 text-center">
                   <div className="text-[--color-muted] mb-3">
                     <svg className="w-12 h-12 mx-auto mb-3 text-[--color-brand-400]/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -110,6 +240,7 @@ export default function ItemDetailPage() {
             <div className="h-full overflow-auto p-6 bg-gradient-to-br from-[--color-surface] to-[--color-surface-2]">
               <TranscriptViewer 
                 onSummaryGenerated={setAiSummary}
+                onTranscriptLoaded={setTranscriptContent}
                 userTopics={userTopics}
               />
             </div>

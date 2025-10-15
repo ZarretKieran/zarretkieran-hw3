@@ -178,19 +178,3 @@ body {
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background: color-mix(in oklab, var(--brand-400) 60%, transparent);
 }
-
-/* Fade-in animation for tab transitions */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.animate-fadeIn {
-  animation: fadeIn 0.3s ease-out;
-}

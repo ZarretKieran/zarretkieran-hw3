@@ -12,10 +12,11 @@ interface TranscriptData {
 
 interface TranscriptViewerProps {
   onSummaryGenerated?: (summary: string) => void;
+  onTranscriptLoaded?: (content: string[]) => void;
   userTopics?: string[];
 }
 
-export function TranscriptViewer({ onSummaryGenerated, userTopics }: TranscriptViewerProps) {
+export function TranscriptViewer({ onSummaryGenerated, onTranscriptLoaded, userTopics }: TranscriptViewerProps) {
   const [url, setUrl] = useState("");
   const [transcript, setTranscript] = useState<TranscriptData | null>(null);
   const [loading, setLoading] = useState(false);
@@ -46,14 +47,19 @@ export function TranscriptViewer({ onSummaryGenerated, userTopics }: TranscriptV
 
       const data = await response.json();
       setTranscript(data.transcript);
-      
-      // Generate AI summary after transcript is loaded
+      setError(null);
+
+      // Notify parent of transcript content
+      if (data.transcript && onTranscriptLoaded) {
+        onTranscriptLoaded(data.transcript.content);
+      }
+
+      // Generate summary after successful transcript fetch
       if (data.transcript && onSummaryGenerated) {
         await generateSummary(data.transcript.content);
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : "An error occurred");
-      setTranscript(null);
     } finally {
       setLoading(false);
     }
