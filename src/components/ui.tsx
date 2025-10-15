@@ -4,13 +4,13 @@ import { forwardRef } from "react";
 
 export const Button = forwardRef<HTMLButtonElement, React.ButtonHTMLAttributes<HTMLButtonElement> & { variant?: "primary" | "secondary" | "ghost" }>(
   function Button({ className = "", variant = "primary", ...props }, ref) {
-    const base = "inline-flex items-center justify-center rounded-lg text-sm px-4 py-2 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[--ring-color] disabled:opacity-50 disabled:cursor-not-allowed shadow-sm hover:shadow-md hover:-translate-y-[1px] active:translate-y-0";
+    const base = "inline-flex items-center justify-center rounded-lg text-sm font-medium px-4 py-2.5 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-[--color-background] focus-visible:ring-[--ring-color] disabled:opacity-50 disabled:cursor-not-allowed";
     const styles =
       variant === "primary"
-        ? "bg-[--color-brand-600] hover:bg-[--color-brand-500] text-white"
+        ? "bg-gradient-to-br from-[--color-brand-500] to-[--color-brand-600] hover:from-[--color-brand-400] hover:to-[--color-brand-500] text-white shadow-[--shadow-button] hover:shadow-[--shadow-button-hover] hover:-translate-y-0.5 active:translate-y-0 border border-[color-mix(in_oklab,var(--brand-400)_40%,transparent)]"
         : variant === "secondary"
-        ? "border border-white/10 bg-surface/60 hover:bg-white/10"
-        : "hover:bg-white/10";
+        ? "border-2 border-[--color-brand-400]/30 bg-[--color-surface-elevated] hover:bg-[--color-brand-500]/10 hover:border-[--color-brand-400]/50 text-[--color-brand-100] shadow-sm hover:shadow-md hover:-translate-y-0.5 active:translate-y-0"
+        : "hover:bg-white/10 text-[--color-muted] hover:text-[--color-foreground]";
     return <button ref={ref} className={`${base} ${styles} ${className}`} {...props} />;
   }
 );
