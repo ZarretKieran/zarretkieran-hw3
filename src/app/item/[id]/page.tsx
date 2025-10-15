@@ -3,6 +3,7 @@
 import { useParams } from "next/navigation";
 import { MOCK_FEED } from "@/lib/mock";
 import { SplitViewer } from "@/components/SplitViewer";
+import { TranscriptViewer } from "@/components/TranscriptViewer";
 import Link from "next/link";
 import { Button, Card } from "@/components/ui";
 import { useAppState } from "@/lib/state";
@@ -77,7 +78,7 @@ export default function ItemDetailPage() {
       <div className="mt-6">
         <div className="flex items-baseline justify-between mb-2">
           <div className="section-title">Document Viewer</div>
-          <div className="text-xs muted">Left: extracted text · Right: original PDF</div>
+          <div className="text-xs muted">Left: extracted text · Right: live transcript loader</div>
         </div>
         <SplitViewer
           left={
@@ -92,17 +93,7 @@ export default function ItemDetailPage() {
           }
           right={
             <div className="h-full overflow-auto p-4">
-              <div className="text-xs muted">Original PDF preview (mock pages)</div>
-              <div className="mt-3 grid gap-3">
-                {(item.pdfPreview && item.pdfPreview.length > 0 ? item.pdfPreview : [
-                  "No preview available.",
-                ]).map((page, idx) => (
-                  <div key={idx} className="rounded-md border border-white/10 bg-white/5 p-3 text-xs">
-                    <div className="text-[10px] uppercase tracking-wide text-[--color-muted] mb-1">Page {idx + 1}</div>
-                    <div>{page}</div>
-                  </div>
-                ))}
-              </div>
+              <TranscriptViewer />
             </div>
           }
         />
