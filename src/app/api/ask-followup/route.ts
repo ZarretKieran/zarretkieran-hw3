@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-const GEMINI_API_KEY = 'AIzaSyBr3clRH1-v_EnQRtlmVrXWjZO6DNR03dY';
-const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent';
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent';
 
 export async function POST(request: NextRequest) {
   try {

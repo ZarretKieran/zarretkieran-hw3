@@ -86,7 +86,14 @@ export function TranscriptViewer({ onSummaryGenerated, onTranscriptLoaded, userT
       }
 
       const data = await response.json();
-      onSummaryGenerated(data.summary);
+      
+      // Add a note if this is a fallback summary
+      let summaryText = data.summary;
+      if (data.fallback) {
+        summaryText = "🔄 **AI Service Unavailable** - Showing generated summary:\n\n" + data.summary;
+      }
+      
+      onSummaryGenerated(summaryText);
     } catch (err) {
       console.error("Summary generation error:", err);
       onSummaryGenerated("Failed to generate summary. Please try again.");

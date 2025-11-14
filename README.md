@@ -31,4 +31,23 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
+## Environment Variables
+
+For AI-powered transcript summarization to work, you need to configure the Gemini API key:
+
+### Local Development
+Create a `.env.local` file in the project root:
+```
+GEMINI_API_KEY=your_gemini_api_key_here
+```
+
+Get your API key from: https://ai.google.dev/
+
+### Vercel Deployment
+1. Go to your Vercel project dashboard
+2. Navigate to **Settings → Environment Variables**
+3. Add: `GEMINI_API_KEY` = `your_gemini_api_key_here`
+
+**Note**: If no API key is configured, the app will automatically use a fallback summary generator that provides structured summaries without AI processing.
+
 
