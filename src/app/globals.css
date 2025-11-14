@@ -56,15 +56,6 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    --background: #f8fafc; /* slate-50 */
-    --foreground: #0f172a; /* slate-900 */
-    --muted: #475569; /* slate-600 */
-    --surface: #ffffff;
-    --surface-2: #f1f5f9; /* slate-100 */
-  }
-}
 
 html, body {
   min-height: 100%;
