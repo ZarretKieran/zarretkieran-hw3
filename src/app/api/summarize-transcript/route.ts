@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
-const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent';
+const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent';
 
 export async function POST(request: NextRequest) {
   try {
@@ -21,8 +21,11 @@ export async function POST(request: NextRequest) {
     // Try to call Gemini API
     try {
       if (!GEMINI_API_KEY) {
+        console.error('GEMINI_API_KEY not configured in environment');
         throw new Error('API key not configured');
       }
+      
+      console.log('Attempting to call Gemini API...');
       const summary = await generateGeminiSummary(transcriptContent, userTopics);
       return NextResponse.json({ summary });
     } catch (apiError) {
@@ -32,7 +35,8 @@ export async function POST(request: NextRequest) {
       const fallbackSummary = generateFallbackSummary(transcriptContent, userTopics);
       return NextResponse.json({ 
         summary: fallbackSummary,
-        fallback: true 
+        fallback: true,
+        error: apiError instanceof Error ? apiError.message : 'Unknown error'
       });
     }
   } catch (error) {

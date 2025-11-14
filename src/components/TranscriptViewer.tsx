@@ -90,7 +90,8 @@ export function TranscriptViewer({ onSummaryGenerated, onTranscriptLoaded, userT
       // Add a note if this is a fallback summary
       let summaryText = data.summary;
       if (data.fallback) {
-        summaryText = "🔄 **AI Service Unavailable** - Showing generated summary:\n\n" + data.summary;
+        const errorMsg = data.error ? ` (${data.error})` : '';
+        summaryText = "🔄 **AI Service Unavailable**" + errorMsg + " - Showing generated summary:\n\n" + data.summary;
       }
       
       onSummaryGenerated(summaryText);
